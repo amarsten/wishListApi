@@ -29,6 +29,7 @@ CREATE TABLE `items` (
 	`item_id` INT NOT NULL AUTO_INCREMENT,
 	`user_id` INT NOT NULL,
 	`product_id` INT NOT NULL,
+	`size` ENUM('S', 'M', 'L', 'XL') NOT NULL,
 	`quantity` INT NOT NULL,
 	`type` ENUM('cart', 'wishlist') NOT NULL,
 	PRIMARY KEY (`item_id`),
@@ -62,8 +63,8 @@ INSERT INTO `inventory` (`product_id`, `size`, `stock`) VALUES (2, 'XL', 5);
 INSERT INTO `images` (`product_id`, `uri`) VALUES (1, 'red_shirt_image0');
 INSERT INTO `images` (`product_id`, `uri`) VALUES (2, 'blue_shirt_image0');
 
-INSERT INTO `items` (`user_id`, `product_id`, `quantity`, `type`) VALUES (1, 1, 1, 'wishlist');
-INSERT INTO `items` (`user_id`, `product_id`, `quantity`, `type`) VALUES (1, 2, 1, 'wishlist');
+INSERT INTO `items` (`user_id`, `product_id`, `size`, `quantity`, `type`) VALUES (1, 1, "L", 1, 'wishlist');
+INSERT INTO `items` (`user_id`, `product_id`, `size`, `quantity`, `type`) VALUES (1, 2, "L", 1, 'wishlist');
 
 
 

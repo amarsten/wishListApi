@@ -3,8 +3,14 @@ const query = require("./query")
 exports.getWishlist = function(req, res){
 	if (typeof req.params.userId !== 'undefined'){
 		var id = req.params.userId,
-		    type = 'wishlist';
-		query.send('SELECT * from items where user_id = ? AND type = ?', [id, type], res);
+		    type = 'wishlist',
+		    q = `SELECT uri, name, item.size, item.product_id, price, quantity, stock
+		    FROM items as item
+		    JOIN products AS product ON product.product_id =item.product_id 
+		    JOIN images AS image ON image.product_id = item.product_id 
+		    JOIN inventory AS inventory ON inventory.product_id = item.product_id AND item.size = inventory.size
+		    WHERE user_id = ? AND type = ?`
+		query.send(q, [id, type], res);
 	}
 	else{
 		response = []
@@ -20,16 +26,18 @@ exports.addToWishlist = function(req, res){
  
 	if (
 		typeof req.body.userId !== 'undefined' && 
-		typeof req.body.productId !== 'undefined' && 
+		typeof req.body.productId !== 'undefined' &&
+		typeof req.body.size !== 'undefined' && 
 		typeof req.body.quantity !== 'undefined'  
 	) {
 		var userId = req.body.userId, 
 	        productId = req.body.productId, 
-	        quantity = req.body.quantity
+	        quantity = req.body.quantity,
+	        size = req.body.size,
 	        type = 'wishlist';
  
-		query.send('INSERT INTO items (user_id, product_id, quantity, type) VALUES (?, ?, ?, ?)', 
-			[userId, productId, quantity, type], res);
+		query.send('INSERT INTO items (user_id, product_id, quantity, size, type) VALUES (?, ?, ?, ?, ?)', 
+			[userId, productId, quantity, size, type], res);
 	}
 	else {
 		response.push({'result' : 'error', 'msg' : 'Please fill required details'});
